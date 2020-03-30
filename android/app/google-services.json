@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "694120516282",
+    "firebase_url": "https://moyawim-67b6b.firebaseio.com",
+    "project_id": "moyawim-67b6b",
+    "storage_bucket": "moyawim-67b6b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694120516282:android:9a7e2dc10cfb9b4b435083",
+        "android_client_info": {
+          "package_name": "com.example.moyawim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "694120516282-muko38n5ok5667emdobjph8bl1prv07o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-K5i04vuxA8a_VNkTOHefETP1V4hJ3zI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "694120516282-muko38n5ok5667emdobjph8bl1prv07o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
