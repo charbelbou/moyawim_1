@@ -6,10 +6,10 @@ import 'drawer.dart';
 
 double windowSize = 271;
 bool isEditing = false;
-class rating extends StatelessWidget {
+class ratingDisplay extends StatelessWidget {
   final String uid;
 
-  rating(this.uid);
+  ratingDisplay(this.uid);
 
   @override
   Widget build(BuildContext context) {
@@ -43,16 +43,16 @@ class rating extends StatelessWidget {
   }
 }
 
-class Profile extends StatefulWidget {
+class visitorProfile extends StatefulWidget {
   final String uid;
 
-  Profile(this.uid);
+  visitorProfile(this.uid);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<Profile> {
+class _ProfilePageState extends State<visitorProfile> {
 
   Widget getPic(String uid){
     return StreamBuilder(
@@ -69,7 +69,7 @@ class _ProfilePageState extends State<Profile> {
             ):null,
             backgroundImage: imageUrl!=""?
             NetworkImage(
-              snapshot.data["picture"]
+                snapshot.data["picture"]
             ):null,
           );
         }
@@ -80,14 +80,9 @@ class _ProfilePageState extends State<Profile> {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Your Profile",
-          style: TextStyle(fontFamily: 'Raleway'),
-        ),
+        title: profHeader(widget.uid)
       ),
       backgroundColor: Colors.black,
-      drawer:
-          Container(color: Colors.blue, child: drawer(widget.uid, "Profile")),
       body: SafeArea(
         child: Container(
           child: ListView(
@@ -119,7 +114,7 @@ class _ProfilePageState extends State<Profile> {
                         Container(
                             padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                             child: Center(
-                              child: rating(widget.uid),
+                              child: ratingDisplay(widget.uid),
                             )
                         ),
                         Card(
@@ -149,7 +144,6 @@ class _ProfilePageState extends State<Profile> {
                             ),
                           ),
                         ),
-
                       ],
                     ),
                   ),
@@ -159,58 +153,58 @@ class _ProfilePageState extends State<Profile> {
                 elevation: 5.0,
                 color: Colors.grey[900],
                 child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Column(
-                    children: <Widget>[
-                      Card(
-                        elevation: 10.0,
-                        color: Colors.grey[850],
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    "Contact",
-                                    style: TextStyle(
-                                        fontFamily: 'Raleway',
-                                        fontSize: 20.5
+                    padding: const EdgeInsets.all(4.0),
+                    child: Column(
+                      children: <Widget>[
+                        Card(
+                          elevation: 10.0,
+                          color: Colors.grey[850],
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "Contact",
+                                      style: TextStyle(
+                                          fontFamily: 'Raleway',
+                                          fontSize: 20.5
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.email,
+                                      color: Colors.white,
                                     ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.email,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: 5.0,),
-                                  profEmail(widget.uid),
-                                ],
-                              ),
-                            ],
+                                    SizedBox(width: 5.0,),
+                                    profEmail(widget.uid),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.location_on,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 5.0,),
-                            profLoc(widget.uid),
-                          ],
-                        ),
-                      )
-                    ],
-                  )
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.location_on,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 5.0,),
+                              profLoc(widget.uid),
+                            ],
+                          ),
+                        )
+                      ],
+                    )
                 ),
               ),
             ],
@@ -240,12 +234,30 @@ class profName extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream:
-            Firestore.instance.collection("users").document(uid).snapshots(),
+        Firestore.instance.collection("users").document(uid).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text("Loading");
           return Text(
               snapshot.data['firstname'] + " " + snapshot.data['lastname'],
               style: TextStyle(fontSize: 24, fontFamily: 'Raleway'));
+        });
+  }
+}
+class profHeader extends StatelessWidget {
+  final String uid;
+
+  profHeader(this.uid);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream:
+        Firestore.instance.collection("users").document(uid).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return Text("Loading");
+          return Text(
+              snapshot.data['firstname']+"'s profile",
+              style: TextStyle(fontFamily: 'Raleway'));
         });
   }
 }
@@ -259,7 +271,7 @@ class profLoc extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream:
-            Firestore.instance.collection("users").document(uid).snapshots(),
+        Firestore.instance.collection("users").document(uid).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text("Loading");
           return Text(snapshot.data['location'],
@@ -277,7 +289,7 @@ class profBio extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream:
-            Firestore.instance.collection("users").document(uid).snapshots(),
+        Firestore.instance.collection("users").document(uid).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text("Loading");
           return Text(snapshot.data['biography'],
@@ -295,7 +307,7 @@ class profEmail extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream:
-            Firestore.instance.collection("users").document(uid).snapshots(),
+        Firestore.instance.collection("users").document(uid).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Text("Loading");
           return Text(snapshot.data['email'],

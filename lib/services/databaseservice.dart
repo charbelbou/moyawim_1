@@ -11,10 +11,15 @@ class DatabaseService{
     return await userCollection.document(uid).setData({
       'firstname':firstName,
       'lastname':lastName,
-      'email':email
+      'email':email,
+      'reviewcount':0,
+      'totalstars':0,
+      'location':"",
+      'picture':"",
+      'phone':"",
+      'new': true
     });
   }
-
 }
 
 

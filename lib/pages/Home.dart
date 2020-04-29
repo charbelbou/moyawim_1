@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:moyawim/homefiles/content.dart';
 import 'drawer.dart';
 import 'package:moyawim/homefiles/latestads.dart';
+import 'recommenedAds.dart';
 
 
 
@@ -14,39 +15,31 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      title: "Moyawim",
-      theme: ThemeData(
-        brightness: Brightness.dark,
-      ),
-      home: Scaffold(
+    return Scaffold(
           appBar: AppBar(
             title: Text(
               "Moyawim",
               style: TextStyle(fontFamily: 'Raleway'),
             ),
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.grey[900],
             elevation: 0.0,
           ),
           drawer: drawer(uid,"Home"),
           body: SingleChildScrollView(
             child: Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.black12, Colors.white10])),
+              color: Colors.black45,
               child: Column(
                 children: <Widget>[
-                  Content(),
-                  ListPage(),
+                  Content(uid),
+                  recommendedAds(uid),
+                  ListPage(uid),
                   SizedBox(
                     height: 400.0,
                   )
                 ],
               ),
             ),
-          )),
+          ),
     );
   }
 }

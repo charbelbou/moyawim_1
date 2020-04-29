@@ -49,23 +49,21 @@ class _LoginState extends State<Login> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-          text: 'mo',
-          style: GoogleFonts.zillaSlab(
-            textStyle: Theme.of(context).textTheme.display1,
+          text: 'Moyawim',
+          style: TextStyle(
+            fontFamily: 'Raleway',
             fontSize: 30,
-            fontWeight: FontWeight.w600,
-            color: Colors.cyan,
+            color: Colors.white,
           ),
-          children: [
-            TextSpan(
-              text: 'ya',
-              style: TextStyle(color: Colors.cyan, fontSize: 30),
-            ),
-            TextSpan(
-              text: 'wim',
-              style: TextStyle(color: Colors.cyan,  fontSize: 30),
-            ),
-          ]),
+      ),
+    );
+  }
+  Widget bulb(){
+    return Icon(
+        Icons
+            .lightbulb_outline,
+        color: Colors.white,
+      size: 60,
     );
   }
   Widget _createAccountLabel() {
@@ -76,8 +74,8 @@ class _LoginState extends State<Login> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            'Don\'t have an account ?',
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            'Don\'t have an account?',
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Colors.white),
           ),
           SizedBox(
             width: 5,
@@ -110,16 +108,23 @@ class _LoginState extends State<Login> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Divider(
-                thickness: 1,
+                color: Colors.white,
+                thickness: 2,
               ),
             ),
           ),
-          Text('or'),
+          Text(
+            'or',
+            style: TextStyle(
+              color: Colors.white
+            ),
+          ),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Divider(
-                thickness: 1,
+                color: Colors.white,
+                thickness: 2,
               ),
             ),
           ),
@@ -136,7 +141,12 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return loading ? ColorLoader(): Scaffold(
         body: SingleChildScrollView(
-        child: Container(
+          child: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.black87,Color(0xFF444152)])),
             height: MediaQuery.of(context).size.height,
             child: Stack(
               children: <Widget>[
@@ -146,17 +156,28 @@ class _LoginState extends State<Login> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      SizedBox(height: 10.0),
+                      bulb(),
+                      SizedBox(height: 0.0),
                       _title(),
                       Form(
                         key:_formkey,
                         child: Column(
                           children: <Widget>[
-                            SizedBox(height: 130.0),
+                            SizedBox(height: 95.0),
                             TextFormField(
+                                inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[ ]'))],
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-                                  hintText: "Email",
-                                  filled: true,
+                                  labelStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                  labelText: "Email",
+                                  prefixIcon:
+                                  const Icon(Icons.mail, color: Colors.white),
                                 ),
                                 validator: (val) => val.isEmpty? 'Enter an email' : null,
                                 onChanged: (val){
@@ -165,11 +186,17 @@ class _LoginState extends State<Login> {
                             ),
                             SizedBox(height: 20.0),
                             TextFormField(
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-                                  hintText: "Password",
-                                  filled: true,
-
+                                  labelStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                  labelText: "Password",
+                                  prefixIcon:
+                                  const Icon(Icons.lock, color: Colors.white),
                                 ),
                                 validator: (val) => val.length < 6 ? 'Must be more than 6 characters' : null,
                                 obscureText: true,
@@ -181,43 +208,32 @@ class _LoginState extends State<Login> {
                             MaterialButton(
                               padding: EdgeInsets.symmetric(vertical: 5),
                               child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.white)
+                                ),
                                 child: Text(
-                                    'Sign in',
-                                    style: TextStyle(color:Colors.black,fontSize: 15),
-
-                                    textAlign: TextAlign.center,
+                                  'LOGIN',
+                                  style: TextStyle(color:Colors.white,fontSize: 15),
+                                  textAlign: TextAlign.center,
                                 ),
 
                                 height:50,
                                 width: MediaQuery.of(context).size.width,
                                 padding: EdgeInsets.symmetric(vertical: 15),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                          color: Colors.grey.shade200,
-                                          offset: Offset(2, 4),
-                                          blurRadius: 5,
-                                          spreadRadius: 2)
-                                    ],
-                                    gradient: LinearGradient(
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
-                                        colors: [Colors.blue[300], Colors.teal])),
 
                               ),
-                                onPressed: () async{
-                                  if (_formkey.currentState.validate()){
-                                    setState(() => loading=true);
-                                    dynamic result= await _auth.LoginWithEmailAndPassword(email, password);
-                                    if(result == null){
-                                      setState(() {
-                                        error = "Could not sign in with those credentials";
-                                        loading=false;
-                                      });
-                                    }
+                              onPressed: () async{
+                                if (_formkey.currentState.validate()){
+                                  setState(() => loading=true);
+                                  dynamic result= await _auth.LoginWithEmailAndPassword(email, password);
+                                  if(result == null){
+                                    setState(() {
+                                      error = "Could not sign in with those credentials";
+                                      loading=false;
+                                    });
                                   }
-                                },
+                                }
+                              },
                             ),
                             SizedBox(
                               width: 10,
@@ -226,16 +242,16 @@ class _LoginState extends State<Login> {
                             _createAccountLabel(),
 
 
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
+              ],
             ),
-          ],
-        ),
-      ),
-      )
+          ),
+        )
     );
   }
 }

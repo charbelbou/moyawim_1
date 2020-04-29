@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moyawim/pages/FirstPage.dart';
 import 'package:moyawim/pages/Register.dart';
+import 'package:moyawim/pages/secondWrapper.dart';
 
 import 'Home.dart';
 import 'Login.dart';
@@ -16,7 +17,7 @@ class Wrapper extends StatelessWidget {
 
     //return either home or authenticate
     if(user!=null){
-      return Home(user.uid);
+      return secondWrapper(user.uid);
     }
     else{
       return Authenticate();

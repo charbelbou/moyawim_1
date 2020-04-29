@@ -12,14 +12,18 @@ class AlwaysDisabledFocusNode extends FocusNode {
 }
 
 class CreateSearchView extends StatefulWidget {
+  String uid;
+
+  CreateSearchView({this.uid});
+
   @override
   _CreateSearchViewState createState() => _CreateSearchViewState();
 }
 
 class _CreateSearchViewState extends State<CreateSearchView> {
-  navigateToSearchPage() {
+  navigateToSearchPage(String uid) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SearchPage()));
+        context, MaterialPageRoute(builder: (context) => SearchPage(uid: widget.uid,)));
   }
 
   @override
@@ -35,7 +39,7 @@ class _CreateSearchViewState extends State<CreateSearchView> {
         enableInteractiveSelection: false,
         focusNode: new AlwaysDisabledFocusNode(),
         onTap: () {
-          navigateToSearchPage();
+          navigateToSearchPage(widget.uid);
         },
         decoration: InputDecoration(
             hintText: "Search for Ads",
@@ -50,6 +54,10 @@ class _CreateSearchViewState extends State<CreateSearchView> {
 }
 
 class SearchPage extends StatefulWidget {
+  String uid;
+
+  SearchPage({this.uid});
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -58,9 +66,9 @@ class _SearchPageState extends State<SearchPage> {
   String searchTag = "";
   TextEditingController _val = TextEditingController();
 
-  navigateToResult(String st) {
+  navigateToResult(String st, String uid) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ResultPage(st: st)));
+        context, MaterialPageRoute(builder: (context) => ResultPage(st: st, uid: uid,)));
   }
 
   Future _data;
@@ -99,10 +107,33 @@ class _SearchPageState extends State<SearchPage> {
 
   static int min = 1, max = 4;
 
-  int next(int min, int max) => min + _random.nextInt(max - min);
+  static int next(int min, int max) => min + _random.nextInt(max - min);
+  int first = next(min, max);
+  int second = next(min, max);
+  int third = next(min, max);
+
+  void check(){
+    bool c = false;
+
+    while(c != true){
+      if((first != second) && (first != third) && (second != third)){
+        c = true;
+      }
+      else{
+        first = next(min, max);
+        second = next(min, max);
+        third = next(min, max);
+      }
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
         appBar: AppBar(
           actions: <Widget>[
@@ -110,7 +141,7 @@ class _SearchPageState extends State<SearchPage> {
               icon: Icon(Icons.search, color: Colors.white),
               onPressed: () {
                 searchTag = _val.text.toLowerCase();
-                navigateToResult(searchTag);
+                navigateToResult(searchTag, widget.uid);
               },
             )
           ],
@@ -127,7 +158,7 @@ class _SearchPageState extends State<SearchPage> {
             controller: _val,
             onSubmitted: (_val) {
               searchTag = _val.toLowerCase();
-              navigateToResult(searchTag);
+              navigateToResult(searchTag, widget.uid);
             },
           ),
         ),
@@ -141,11 +172,7 @@ class _SearchPageState extends State<SearchPage> {
             }
             else{
             return Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.black12, Colors.white10])),
+              color: Colors.black45,
                 child: Column(children: <Widget>[
                   Expanded(
                       flex: 1,
@@ -170,90 +197,100 @@ class _SearchPageState extends State<SearchPage> {
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                            GestureDetector(
-                                onTap: () => navigateToResult(
-                                    snapshot.data[index].data["tags"][0]),
-                                child: Container(
-                                    margin: EdgeInsets.all(7.0),
-                                    height: 90.0,
-                                    width: 120.0,
-                                    child: Card(
-                                      color: _color(),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Icon(Icons.lightbulb_outline,
-                                              color: Colors.black),
-                                          Text(
-                                            (snapshot.data[index].data["tags"]
-                                                [0]),
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 18.0,
-                                                fontFamily: 'Raleway'),
-                                          )
-                                        ],
-                                      ),
-                                    ))),
-                            GestureDetector(
-                                onTap: () => navigateToResult(snapshot
-                                    .data[(index + 1) * next(min, max)]
-                                    .data["tags"][0]),
-                                child: Container(
-                                    margin: EdgeInsets.all(7.0),
-                                    height: 90.0,
-                                    width: 120.0,
-                                    child: Card(
-                                      color: _color(),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Icon(Icons.lightbulb_outline,
-                                              color: Colors.black),
-                                          Text(
-                                            (snapshot
-                                                .data[(index + 1) *
-                                                    next(min, max)]
-                                                .data["tags"][0]),
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 18.0,
-                                                fontFamily: 'Raleway'),
-                                          )
-                                        ],
-                                      ),
-                                    ))),
-                            GestureDetector(
-                                onTap: () => navigateToResult(snapshot
-                                    .data[(index + 2) * next(min, max)]
-                                    .data["tags"][0]),
-                                child: Container(
-                                    margin: EdgeInsets.all(7.0),
-                                    height: 90.0,
-                                    width: 120.0,
-                                    child: Card(
-                                      color: _color(),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Icon(Icons.lightbulb_outline,
-                                              color: Colors.black),
-                                          Text(
-                                            (snapshot
-                                                .data[(index + 2) *
-                                                    next(min, max)]
-                                                .data["tags"][0]),
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 18.0,
-                                                fontFamily: 'Raleway'),
-                                          )
-                                        ],
-                                      ),
-                                    ))),
+                                Expanded(
+                                  flex: 3,
+                                  child: GestureDetector(
+                                      onTap: () => navigateToResult(
+                                          snapshot.data[(index) * third]
+                                              .data["tags"][0], widget.uid),
+                                      child: Container(
+                                          margin: EdgeInsets.all(7.0),
+                                          height: height * 0.1,
+                                          width: width * 0.1,
+                                          child: Card(
+                                            color: _color(),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Icon(Icons.lightbulb_outline,
+                                                    color: Colors.black),
+                                                Text(
+                                                  (snapshot.data[(index) * third]
+                                                      .data["tags"][0]),
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 18.0,
+                                                      fontFamily: 'Raleway'),
+                                                )
+                                              ],
+                                            ),
+                                          ))),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: GestureDetector(
+                                      onTap: () => navigateToResult(snapshot
+                                          .data[(index + 1) * first]
+                                          .data["tags"][0], widget.uid),
+                                      child: Container(
+                                          margin: EdgeInsets.all(7.0),
+                                          height: height * 0.1,
+                                          width: width * 0.1,
+                                          child: Card(
+                                            color: _color(),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Icon(Icons.lightbulb_outline,
+                                                    color: Colors.black),
+                                                Text(
+                                                  (snapshot
+                                                      .data[(index + 1) *
+                                                      first]
+                                                      .data["tags"][0]),
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 18.0,
+                                                      fontFamily: 'Raleway'),
+                                                )
+                                              ],
+                                            ),
+                                          ))),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: GestureDetector(
+                                      onTap: () => navigateToResult(snapshot
+                                          .data[(index + 2) * second]
+                                          .data["tags"][0], widget.uid),
+                                      child: Container(
+                                          margin: EdgeInsets.all(7.0),
+                                          height: height * 0.1,
+                                          width: width * 0.1,
+                                          child: Card(
+                                            color: _color(),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Icon(Icons.lightbulb_outline,
+                                                    color: Colors.black),
+                                                Text(
+                                                  (snapshot
+                                                      .data[(index + 2) *
+                                                      second]
+                                                      .data["tags"][0]),
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 18.0,
+                                                      fontFamily: 'Raleway'),
+                                                )
+                                              ],
+                                            ),
+                                          ))),
+                                ),
                           ]));
                     },
                   ))

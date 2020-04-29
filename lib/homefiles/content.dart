@@ -9,6 +9,8 @@ import 'search.dart';
 import 'detailpage.dart';
 
 class Content extends StatefulWidget {
+  final String uid;
+  Content(this.uid);
   @override
   _ContentState createState() => _ContentState();
 }
@@ -28,7 +30,7 @@ class _ContentState extends State<Content> {
 
     navigateToDetail(DocumentSnapshot ad) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => DetailPage(ad: ad)));
+          context, MaterialPageRoute(builder: (context) => DetailPage(ad: ad,uid: widget.uid)));
     }
 
     @override
@@ -51,9 +53,9 @@ class _ContentState extends State<Content> {
     String searchTag3 = "photography";
     String searchTag4 = "education";
 
-    navigateToResult(String st) {
+    navigateToResult(String st,String uid) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ResultPage(st: st)));
+          context, MaterialPageRoute(builder: (context) => ResultPage(st: st,uid:uid)));
     }
 
     return ConstrainedBox(
@@ -66,7 +68,7 @@ class _ContentState extends State<Content> {
               child: Container(
                 child: Column(
                   children: <Widget>[
-                    CreateSearchView(),
+                    CreateSearchView(uid:widget.uid),
                     Row(
                       children: <Widget>[
                         Text(
@@ -86,7 +88,7 @@ class _ContentState extends State<Content> {
                               padding: EdgeInsets.only(right: 5.0),
                               child: GestureDetector(
                                   onTap: () {
-                                    navigateToResult(searchTag);
+                                    navigateToResult(searchTag,widget.uid);
                                   },
                                   child: Container(
                                     height: 100.0,
@@ -119,7 +121,7 @@ class _ContentState extends State<Content> {
                                             bottom: 2.5, right: 2.5),
                                         child: GestureDetector(
                                             onTap: () {
-                                              navigateToResult(searchTag2);
+                                              navigateToResult(searchTag2,widget.uid);
                                             },
                                             child: Container(
                                               decoration: BoxDecoration(
@@ -151,7 +153,7 @@ class _ContentState extends State<Content> {
                                             top: 2.5, right: 2.5),
                                         child: GestureDetector(
                                             onTap: () {
-                                              navigateToResult(searchTag3);
+                                              navigateToResult(searchTag3,widget.uid);
                                             },
                                             child: Container(
                                               decoration: BoxDecoration(
@@ -196,7 +198,7 @@ class _ContentState extends State<Content> {
                                             bottom: 2.5, left: 2.5),
                                         child: GestureDetector(
                                             onTap: () {
-                                              navigateToResult(searchTag4);
+                                              navigateToResult(searchTag4,widget.uid);
                                             },
                                             child: Container(
                                               decoration: BoxDecoration(
@@ -227,7 +229,7 @@ class _ContentState extends State<Content> {
                                             top: 2.5, left: 2.5),
                                         child: GestureDetector(
                                             onTap: () {
-                                              navigateToResult("test");
+                                              navigateToResult("test",widget.uid);
                                             },
                                             child: Container(
                                               decoration: BoxDecoration(

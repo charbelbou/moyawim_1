@@ -1,16 +1,65 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:random_color/random_color.dart';
 import 'package:moyawim/services/auth.dart';
+import 'package:moyawim/pages/visitorProfile.dart';
 
 import '../loader.dart';
-import 'latestads.dart';
+import '../pages/picturesGet.dart';
+class fName extends StatelessWidget {
+  final String uid;
+
+  fName(this.uid);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream:
+        Firestore.instance.collection("users").document(uid).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return Text("Loading");
+          return Text(
+              "   "+snapshot.data['firstname'] + " " + snapshot.data['lastname'],
+              style: TextStyle(fontFamily: 'Raleway', color: Colors.white,fontSize: 18));
+        });
+  }
+}
+class firstl extends StatelessWidget {
+  final String uid;
+
+  firstl(this.uid);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream:
+        Firestore.instance.collection("users").document(uid).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return Text("Loading");
+          return CircleAvatar(
+            radius: 26,
+            backgroundColor: Color(0xFFF1B069),
+            child: snapshot.data["picture"] == ""
+                ? Text(
+              snapshot.data['firstname'][0],
+              style: TextStyle(fontSize: 40.0),
+            )
+                : null,
+            backgroundImage: snapshot.data["picture"] != ""
+                ? NetworkImage(snapshot.data["picture"])
+                : null,
+          );
+        });
+  }
+}
 
 class DetailPage extends StatefulWidget {
-  final DocumentSnapshot ad;
+  DocumentSnapshot ad;
+  final String uid;
 
-  DetailPage({this.ad});
+  DetailPage({this.ad, this.uid});
 
   @override
   _DetailPageState createState() => _DetailPageState();
@@ -18,6 +67,7 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   Future _data;
+  final db = Firestore.instance;
 
   Future getAds() async {
     var fs = Firestore.instance;
@@ -25,15 +75,55 @@ class _DetailPageState extends State<DetailPage> {
     return qn.documents;
   }
 
+  bool _color1 = false;
+  bool _color2 = false;
+  bool _isMyAd = false;
+  bool isImage = true;
+
+  void check() {
+    if (widget.ad.data['poster'] == widget.uid) {
+      _isMyAd = true;
+    }
+    var len1 = widget.ad.data["urls"];
+    int len;
+    if(len1 != null){
+      int len = widget.ad.data["urls"].length;
+      if(len != 0){
+        isImage = true;
+      }
+      else{
+        isImage = false;
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _data = getAds();
+
+    if (getFav().contains(widget.uid)) {
+      _color1 = true;
+    }
+
+    if (getApplied().contains(widget.uid)) {
+      _color2 = true;
+    }
   }
 
-  navigateToDetail(DocumentSnapshot ad) {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => DetailPage(ad: ad)));
+  List<String> getFav() {
+    List<String> favorites = List.from(widget.ad.data["favoritedby"]);
+    return favorites;
+  }
+
+  List<String> getApplied() {
+    List<String> applied = List.from(widget.ad.data["applied"]);
+    return applied;
+  }
+
+  navigateToDetail(DocumentSnapshot ad, String uid) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => DetailPage(ad: ad, uid: uid)));
   }
 
   static RandomColor _randomColor = RandomColor();
@@ -41,13 +131,14 @@ class _DetailPageState extends State<DetailPage> {
   Color _color() =>
       _randomColor.randomColor(colorBrightness: ColorBrightness.light);
 
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
     final mainTag = widget.ad.data["tags"][0];
-
+    check();
     return Scaffold(
         appBar: AppBar(),
         body: FutureBuilder(
@@ -58,13 +149,16 @@ class _DetailPageState extends State<DetailPage> {
                   child: ColorLoader(),
                 );
               } else {
+
                 return Container(
+                  color: Colors.black45,
                     child: ListView(children: <Widget>[
                   Container(
                       margin: EdgeInsets.all(3.0),
                       height: 230.0,
                       width: 600.0,
-                      child: Card(
+                      color: Colors.grey[800],
+                      child: !isImage ? Card(
                         color: Colors.cyan,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -79,7 +173,9 @@ class _DetailPageState extends State<DetailPage> {
                             )
                           ],
                         ),
-                      )),
+                      ) :
+                      getPic(ad: widget.ad)
+                  ),
                   Container(
                       padding: EdgeInsets.only(left: 10.0, top: 10.0),
                       child: Align(
@@ -96,46 +192,110 @@ class _DetailPageState extends State<DetailPage> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          ("Price \$" + widget.ad.data["price"]),
+                          ("\$" + widget.ad.data["price"]),
                           textAlign: TextAlign.start,
                           style:
                               TextStyle(fontFamily: 'Raleway', fontSize: 25.0),
                         ),
                       )),
-                  Container(
-                    padding: EdgeInsets.only(right: 10.0, left: 10.0),
-                    margin: EdgeInsets.only(top: 20.0, bottom: 5.0),
-                    height: 60.0,
-                    width: 400.0,
-                    child: Card(
-                        color: Colors.deepOrangeAccent,
-                        child: Center(
+                  SizedBox(height: 10),
+                  MaterialButton(
+                      padding: EdgeInsets.only(right: 10.0, left: 10.0),
+                      child: GestureDetector(
+                        onTap: _isMyAd
+                            ? null
+                            : () async {
+                                setState(() {
+                                  _color2 = !_color2;
+                                });
+                             if(!_color2){
+                               await db
+                                    .collection('ads')
+                                    .document(widget.ad.documentID)
+                                    .updateData({
+                                      'applied':FieldValue.arrayRemove([widget.uid]),
+                                      'worker': "",
+                                      'phase': 1,
+                                  });
+                                }
+                             else{
+                               await db
+                                   .collection('ads')
+                                   .document(widget.ad.documentID)
+                                   .updateData({
+                                 'applied':FieldValue.arrayUnion([widget.uid])
+                               });
+                              }
+                             },
+                        child: Container(
                           child: Text(
-                            "Take Ad",
+                            _color2 ? "Applied" : "Apply",
                             textAlign: TextAlign.center,
                             style: TextStyle(
+                                color:
+                                    !_isMyAd ? Colors.white : Colors.grey[450],
                                 fontSize: 20.0,
                                 fontFamily: 'Raleway',
                                 fontWeight: FontWeight.bold),
                           ),
-                        )),
-                  ),
-                  Container(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.symmetric(vertical: 13),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              gradient: LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: _color2
+                                      ? [Colors.red, Colors.redAccent]
+                                      : [Colors.orange, Colors.orange[700]])),
+                        ),
+                      )),
+                  SizedBox(height: 10),
+                  MaterialButton(
                     padding: EdgeInsets.only(right: 10.0, left: 10.0),
-                    margin: EdgeInsets.only(top: 0.0, bottom: 5.0),
-                    height: 60.0,
-                    width: width,
-                    child: Card(
-                        color: Colors.indigoAccent,
-                        child: Center(
+                    child: GestureDetector(
+                        onTap: _isMyAd
+                            ? null
+                            : () async {
+                                setState(() {
+                                  _color1 = !_color1;
+                                });
+                                await db
+                                    .collection('ads')
+                                    .document(widget.ad.documentID)
+                                    .updateData({
+                                  'favoritedby': !_color1
+                                      ? FieldValue.arrayRemove([widget.uid])
+                                      : FieldValue.arrayUnion([widget.uid])
+                                });
+                              },
+                        child: Container(
                           child: Text(
-                            "Add to list",
+                            _color1
+                                ? "Remove from Favorites"
+                                : "Add to Favorites",
                             textAlign: TextAlign.center,
                             style: TextStyle(
+                                color:
+                                    !_isMyAd ? Colors.white : Colors.grey[450],
                                 fontSize: 20.0,
                                 fontFamily: 'Raleway',
                                 fontWeight: FontWeight.bold),
                           ),
+                          height: 50,
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.symmetric(vertical: 13),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              gradient: LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: _color1
+                                      ? [Colors.red, Colors.redAccent]
+                                      : [Colors.blueAccent, Colors.blue[700]])),
                         )),
                   ),
                   Container(
@@ -154,6 +314,7 @@ class _DetailPageState extends State<DetailPage> {
                       width: width,
                       height: 250.0,
                       child: Card(
+                        color: Colors.grey[900],
                         child: Column(
                           children: <Widget>[
                             Container(
@@ -214,6 +375,46 @@ class _DetailPageState extends State<DetailPage> {
                           ],
                         ),
                       )),
+                      Container(
+                          padding:
+                          EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              ("Posted by"),
+                              textAlign: TextAlign.start,
+                              style:
+                              TextStyle(fontFamily: 'Raleway', fontSize: 25.0),
+                            ),
+                          )),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => visitorProfile(widget.ad.data["poster"]))),
+
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(10, 5, 5, 5),
+                            decoration: BoxDecoration(
+                                border:
+                                Border.all(color: Colors.white),
+                                borderRadius:
+                                BorderRadius.circular(10.0)),
+                            height: 70,
+                            width: width,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                firstl(widget.ad.data["poster"]),
+
+                                fName(widget.ad.data["poster"]),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                   Container(
                       padding:
                           EdgeInsets.only(left: 10.0, top: 5.0, bottom: 5.0),
@@ -243,8 +444,8 @@ class _DetailPageState extends State<DetailPage> {
                               return Padding(
                                 padding: EdgeInsets.only(right: 10.0),
                                 child: GestureDetector(
-                                    onTap: () =>
-                                        navigateToDetail(snapshot.data[index]),
+                                    onTap: () => navigateToDetail(
+                                        snapshot.data[index], widget.uid),
                                     child: Container(
                                         width:
                                             MediaQuery.of(context).size.width *
@@ -388,7 +589,6 @@ class _DetailPageState extends State<DetailPage> {
                   )
                 ]));
               }
-              ;
             }));
   }
 }

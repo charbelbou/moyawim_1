@@ -6,7 +6,7 @@ import 'package:moyawim/pages/Add.dart';
 import 'package:moyawim/pages/Profile.dart';
 import 'package:moyawim/pages/Login.dart';
 import 'package:moyawim/pages/Wrapper.dart';
-import 'package:moyawim/pages/Home.dart';
+import 'package:moyawim/pages/rating.dart';
 import 'package:moyawim/pages/test.dart';
 import 'package:moyawim/pages/Wrapper.dart';
 import 'package:moyawim/services/auth.dart';
@@ -27,6 +27,10 @@ class MyApp extends StatelessWidget{
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: MaterialApp(
+        title: "Moyawim",
+        theme: ThemeData(
+          brightness: Brightness.dark,
+        ),
         home: Wrapper(),
       )
     );

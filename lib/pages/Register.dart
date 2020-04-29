@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moyawim/services/auth.dart';
 import 'package:moyawim/loader.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 
 class Register extends StatefulWidget {
 
@@ -18,26 +19,65 @@ class _RegisterState extends State<Register> {
   Widget _title() {
     return RichText(
       text: TextSpan(
-          text: 'Register',
+          text: 'register',
           style: GoogleFonts.zillaSlab(
             textStyle: Theme.of(context).textTheme.display1,
             fontSize: 30,
             fontWeight: FontWeight.w600,
-            color: Colors.cyan,
+            color: Colors.white70,
             ),
           ),
     );
   }
+  Widget _divider() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Divider(
+                color: Colors.white,
+                thickness: 2,
+              ),
+            ),
+          ),
+          Text(
+            'or',
+            style: TextStyle(
+                color: Colors.white
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Divider(
+                color: Colors.white,
+                thickness: 2,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+        ],
+      ),
+    );
+  }
   Widget _createAccountLabel() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 20),
+      margin: EdgeInsets.symmetric(vertical: 10),
       alignment: Alignment.bottomCenter,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
             'Have an account?',
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Colors.white),
           ),
           SizedBox(
             width: 5,
@@ -71,11 +111,15 @@ class _RegisterState extends State<Register> {
     return loading ? ColorLoader(): Scaffold(
       body: SingleChildScrollView(
         child: Container(
-     //       height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.black87,Color(0xFF444152)])),
             child: Stack(
               children: <Widget>[
                 Container(
-//                  padding: EdgeInsets.fromLTRB(10, 10, 50, 0),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -87,70 +131,90 @@ class _RegisterState extends State<Register> {
                           child: Column(
                               children: <Widget>[
                                 SizedBox(height: 30.0),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child:TextFormField(
+                                TextFormField(
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+
                                   decoration: InputDecoration(
-                                        contentPadding: new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                                        hintText: "First name",
-                                        filled: true,
-                                      ),
+                                    labelStyle: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                    ),
+                                        labelText: "First name",
+                                    prefixIcon: const Icon(Icons.account_circle, color: Colors.white),
+
+                                  ),
                                       validator: (val) => val.isEmpty ? 'Enter a first name' : null,
                                       onChanged: (val){
                                         setState(()=>firstname=val);
                                       }
-                                  ),
                                 ),
-                                SizedBox(height: 20.0),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child:TextFormField(
-                                      decoration: InputDecoration(
-                                        contentPadding: new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                                        hintText: "Last name",
-                                        filled: true,
+                                SizedBox(height: 40.0),
 
+                                TextFormField(
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
                                       ),
-                                      validator: (val) => val.isEmpty? 'Enter a last name' : null,
-                                      onChanged: (val){
-                                        setState(()=>lastname=val);
-                                      }
-                                  ),
-                                ),
+                                      labelText: "Last name",
+                                      prefixIcon: const Icon(Icons.account_circle, color: Colors.white),
 
-                                SizedBox(height: 20.0),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child:TextFormField(
-                                      decoration: InputDecoration(
-                                        contentPadding: new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                                        hintText: "Email",
-                                        filled: true,
-
-                                      ),
-                                      validator: (val) => val.isEmpty? 'Enter an email' : null,
-                                      onChanged: (val){
-                                        setState(()=>email=val);
-                                      }
-                                  ),
+                                    ),
+                                    validator: (val) => val.isEmpty? 'Enter a last name' : null,
+                                    onChanged: (val){
+                                      setState(()=>lastname=val);
+                                    }
                                 ),
 
-                                SizedBox(height: 20.0),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child:TextFormField(
-                                      decoration: InputDecoration(
-                                        contentPadding: new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                                        hintText: "Password",
-                                        filled: true,
 
+                                SizedBox(height: 40.0),
+                                TextFormField(
+                                    inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[ ]'))],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
                                       ),
-                                      validator: (val) => val.length < 6 ? 'Must be more than 6 characters' : null,
-                                      obscureText: true,
-                                      onChanged: (val){
-                                        setState(()=>password=val);
-                                      }
-                                  ),
+                                      labelText: "Email",
+                                      prefixIcon: const Icon(Icons.mail, color: Colors.white),
+
+                                    ),
+
+                                    validator: (val) => val.isEmpty? 'Enter an email' : null,
+                                    onChanged: (val){
+                                      setState(()=>email=val);
+                                    }
+                                ),
+
+
+                                SizedBox(height: 40.0),
+
+                                TextFormField(
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                    decoration: InputDecoration(
+                                      labelStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                      labelText: "Password",
+                                      prefixIcon: const Icon(Icons.lock, color: Colors.white),
+
+                                    ),
+                                    validator: (val) => val.length < 6 ? 'Must be more than 6 characters' : null,
+                                    obscureText: true,
+                                    onChanged: (val){
+                                      setState(()=>password=val);
+                                    }
                                 ),
                                 SizedBox(height: 40.0),
                             ],
@@ -158,9 +222,12 @@ class _RegisterState extends State<Register> {
                         ),
                       MaterialButton(
                         child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white)
+                          ),
                           child: Text(
-                            'Register',
-                            style: TextStyle(color:Colors.black,fontSize: 15),
+                            'REGISTER',
+                            style: TextStyle(color:Colors.white,fontSize: 15),
 
                             textAlign: TextAlign.center,
                           ),
@@ -168,19 +235,6 @@ class _RegisterState extends State<Register> {
                           height:50,
                           width: MediaQuery.of(context).size.width,
                           padding: EdgeInsets.symmetric(vertical: 15),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(30)),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Colors.grey.shade200,
-                                    offset: Offset(2, 4),
-                                    blurRadius: 5,
-                                    spreadRadius: 2)
-                              ],
-                              gradient: LinearGradient(
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                  colors: [Colors.blue[300], Colors.teal])),
 
                         ),
                         onPressed: () async{
@@ -196,7 +250,9 @@ class _RegisterState extends State<Register> {
                           }
                         },
                       ),
+                      _divider(),
                       _createAccountLabel(),
+                      SizedBox(height: 68.0),
                     ],
                   ),
                 ),

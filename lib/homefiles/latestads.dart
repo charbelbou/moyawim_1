@@ -9,6 +9,8 @@ import '../loader.dart';
 
 
 class ListPage extends StatefulWidget {
+  final String uid;
+  ListPage(this.uid);
   @override
   _ListPageState createState() => _ListPageState();
 }
@@ -18,13 +20,13 @@ class _ListPageState extends State<ListPage> {
 
   Future getAds() async {
     var fs = Firestore.instance;
-    QuerySnapshot qn = await fs.collection("ads").getDocuments();
+    QuerySnapshot qn = await fs.collection("ads").where("phase",isEqualTo: 1).getDocuments();
     return qn.documents;
   }
 
-  navigateToDetail(DocumentSnapshot ad) {
+  navigateToDetail(DocumentSnapshot ad,String uid) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => DetailPage(ad: ad)));
+        context, MaterialPageRoute(builder: (context) => DetailPage(ad: ad,uid: widget.uid)));
   }
 
   @override
@@ -50,6 +52,8 @@ class _ListPageState extends State<ListPage> {
     });
   }
 
+  bool isImage = false;
+
   @override
   Widget build(BuildContext context) {
 
@@ -68,8 +72,8 @@ class _ListPageState extends State<ListPage> {
             ))
       ]),
       Container(
-        child: FutureBuilder(
-            future: _data,
+        child: StreamBuilder(
+            stream: Firestore.instance.collection("ads").where("phase",isEqualTo: 1).snapshots(),
             builder: (_, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
@@ -78,16 +82,35 @@ class _ListPageState extends State<ListPage> {
               } else {
                 return Container(
                     padding: EdgeInsets.only(left: 15.0, ),
-                    height: height * 0.267,
+                    height: height * 0.35,
+
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
                       itemBuilder: (context, index) {
+
+                        void check() {
+                          var len1 =
+                          snapshot.data.documents[index].data["urls"];
+                          int len;
+                          if (len1 != null) {
+                            int len = snapshot
+                                .data.documents[index].data["urls"].length;
+                            if (len != 0) {
+                              isImage = true;
+                            } else {
+                              isImage = false;
+                            }
+                          }
+                        }
+
+                        check();
+
                         return Padding(
                           padding: EdgeInsets.only(right: 10.0),
                           child: GestureDetector(
                               onTap: () =>
-                                  navigateToDetail(snapshot.data[index]),
+                                  navigateToDetail(snapshot.data.documents[index],widget.uid),
                               child: Container(
                                   width:
                                       MediaQuery.of(context).size.width * 0.7,
@@ -98,19 +121,19 @@ class _ListPageState extends State<ListPage> {
                                   child: GestureDetector(
                                     child: Column(children: <Widget>[
                                       Expanded(
-                                          flex: 5,
+                                          flex: 3,
                                           child: Row(
                                         children: <Widget>[
                                           Expanded(
                                               child: Padding(
                                                   padding: EdgeInsets.only(left:6.0, right: 6.0, top: 6.0),
                                                   child: Container(
-                                                      height: height * 0.3,
+                                                      height: height * 0.2,
                                                       child: Card(
                                                     color: Colors.white60,
                                                     child: ListTile(
                                                       title: Text(
-                                                        snapshot.data[index]
+                                                        snapshot.data.documents[index]
                                                             .data["title"],
                                                         style: TextStyle(
                                                             color: Colors.white,
@@ -122,8 +145,8 @@ class _ListPageState extends State<ListPage> {
                                                                     .bold),
                                                       ),
                                                       subtitle: Text(
-                                                        "Price \$" +
-                                                            snapshot.data[index]
+                                                        "\$" +
+                                                            snapshot.data.documents[index]
                                                                 .data["price"],
                                                         style: TextStyle(
                                                             color: Colors.white,
@@ -152,7 +175,7 @@ class _ListPageState extends State<ListPage> {
                                                             5.0),
                                                     color: colors[index],
                                                   ),
-                                                  child: Column(
+                                                  child: !isImage ? Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .center,
@@ -162,13 +185,13 @@ class _ListPageState extends State<ListPage> {
                                                               .lightbulb_outline,
                                                           color: Colors.white),
                                                       Text(
-                                                        (snapshot.data[index]
+                                                        (snapshot.data.documents[index]
                                                                             .data[
                                                                         "tags"]
                                                                     [0][0])
                                                                 .toUpperCase() +
                                                             (snapshot
-                                                                .data[index]
+                                                                .data.documents[index]
                                                                 .data["tags"][0]
                                                                 .substring(1)),
                                                         style: TextStyle(
@@ -178,7 +201,40 @@ class _ListPageState extends State<ListPage> {
                                                         ),
                                                       )
                                                     ],
-                                                  ),
+                                                  ) :
+                                                  ClipRRect(
+                                                      borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                      child: Image
+                                                          .network(
+                                                        snapshot
+                                                            .data
+                                                            .documents[
+                                                        index]
+                                                            .data["urls"][0],
+                                                        height: 100.0,
+                                                        width: 100.0,
+                                                        fit: BoxFit
+                                                            .cover,
+                                                        filterQuality:
+                                                        FilterQuality
+                                                            .low,
+                                                        loadingBuilder: (BuildContext
+                                                        context,
+                                                            Widget
+                                                            child,
+                                                            ImageChunkEvent
+                                                            loadingProgress) {
+                                                          if (loadingProgress ==
+                                                              null)
+                                                            return child;
+                                                          return Center(
+                                                            child:
+                                                            ColorLoader(),
+                                                          );
+                                                        },
+                                                      )),
                                                 ))),
                                           ),
                                         ],
