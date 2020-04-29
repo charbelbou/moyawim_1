@@ -34,7 +34,7 @@ class Home extends StatelessWidget {
                   recommendedAds(uid),
                   ListPage(uid),
                   SizedBox(
-                    height: 400.0,
+                    height: 15.0,
                   )
                 ],
               ),

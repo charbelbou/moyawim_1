@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:moyawim/homefiles/karim.dart';
 import 'package:moyawim/services/auth.dart';
 
-import 'resultpage.dart';
-import 'latestads.dart';
-import 'search.dart';
+import '../homefiles/resultpage.dart';
+import '../homefiles/latestads.dart';
+import '../homefiles/search.dart';
 import 'detailpage.dart';
 
 class Content extends StatefulWidget {
@@ -49,8 +48,8 @@ class _ContentState extends State<Content> {
     ];
 
     String searchTag = "housework";
-    String searchTag2 = "shopping";
-    String searchTag3 = "photography";
+    String searchTag2 = "driving";
+    String searchTag3 = "technology";
     String searchTag4 = "education";
 
     navigateToResult(String st,String uid) {
@@ -68,7 +67,7 @@ class _ContentState extends State<Content> {
               child: Container(
                 child: Column(
                   children: <Widget>[
-                    CreateSearchView(uid:widget.uid),
+                    CreateSearchView(uid: widget.uid),
                     Row(
                       children: <Widget>[
                         Text(
@@ -137,10 +136,10 @@ class _ContentState extends State<Content> {
                                                       padding: EdgeInsets.only(
                                                           right: 8.0),
                                                       child: Icon(
-                                                          Icons.local_offer,
+                                                          Icons.directions_car,
                                                           color: Colors.white)),
                                                   Text(
-                                                    "Shopping",
+                                                    "Driving",
                                                     style: TextStyle(
                                                         color: Colors.white, fontFamily: 'Raleway'),
                                                   )
@@ -171,12 +170,12 @@ class _ContentState extends State<Content> {
                                                       padding: EdgeInsets.only(
                                                           left: 3.0, right: 2.0),
                                                       child: Icon(
-                                                          Icons.local_see,
+                                                          Icons.computer,
                                                           color: Colors.white))),
                                                   Expanded(
                                                     flex: 8,
                                                     child: Text(
-                                                    "Photography",
+                                                    "Technology",
                                                     style: TextStyle(
                                                         color: Colors.white, fontFamily: 'Raleway')),
                                                   )
@@ -229,7 +228,7 @@ class _ContentState extends State<Content> {
                                             top: 2.5, left: 2.5),
                                         child: GestureDetector(
                                             onTap: () {
-                                              navigateToResult("test",widget.uid);
+                                              navigateToResult("all",widget.uid);
                                             },
                                             child: Container(
                                               decoration: BoxDecoration(
@@ -248,7 +247,7 @@ class _ContentState extends State<Content> {
                                                           Icons.art_track,
                                                           color: Colors.white, )),
                                                   Text(
-                                                    "Jobs",
+                                                    "All",
                                                     style: TextStyle(
                                                         color: Colors.white, fontFamily: 'Raleway'),
                                                   )
@@ -264,199 +263,6 @@ class _ContentState extends State<Content> {
                     SizedBox(
                       height: 15.0,
                     ),
-                    /*
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                            child: Text(
-                          "Popular Tredning",
-                          style: TextStyle(fontSize: 18.0, color: Colors.white),
-                        )),
-                        Expanded(
-                            child: Text(
-                          "View All",
-                          style: TextStyle(color: Color(0xFF2BD093)),
-                          textAlign: TextAlign.end,
-                        ))
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            height: 150.0,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              'https://www.howtogeek.com/wp-content/uploads/2016/01/steam-and-xbox-controllers.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Text("Play Station",
-                                    style: TextStyle(fontSize: 16.0),
-                                    textAlign: TextAlign.center)
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 150.0,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              'https://pawanjewellers.in/wp-content/uploads/2016/09/Jewellery-new.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Text(
-                                  "Jewellery and Watches",
-                                  style: TextStyle(fontSize: 16.0),
-                                  textAlign: TextAlign.center,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 150.0,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              'http://images4.fanpop.com/image/photos/21600000/Electronics-hd-wallpaper-21627626-1920-1200.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Text("Electronics",
-                                    style: TextStyle(fontSize: 16.0),
-                                    textAlign: TextAlign.center)
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                            child: Text(
-                          "Popular Tredning",
-                          style: TextStyle(fontSize: 18.0, color: Colors.white),
-                        )),
-                        Expanded(
-                            child: Text(
-                          "View All",
-                          style: TextStyle(color: Color(0xFF2BD093)),
-                          textAlign: TextAlign.end,
-                        ))
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            height: 150.0,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              'https://www.howtogeek.com/wp-content/uploads/2016/01/steam-and-xbox-controllers.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Text("Play Station",
-                                    style: TextStyle(fontSize: 16.0),
-                                    textAlign: TextAlign.center)
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 150.0,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              'https://pawanjewellers.in/wp-content/uploads/2016/09/Jewellery-new.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Text(
-                                  "Jewellery and Watches",
-                                  style: TextStyle(fontSize: 16.0),
-                                  textAlign: TextAlign.center,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 150.0,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              'http://images4.fanpop.com/image/photos/21600000/Electronics-hd-wallpaper-21627626-1920-1200.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Text("Electronics",
-                                    style: TextStyle(fontSize: 16.0),
-                                    textAlign: TextAlign.center)
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),*/
                   ],
                 ),
               ),

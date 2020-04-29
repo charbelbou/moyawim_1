@@ -194,7 +194,7 @@ class _accAdsState extends State<accAds> {
                             ),
                             Center(
                               child: Text(
-                                "You have been accepted for any Ads yet...",
+                                "You have not been accepted for any Ads yet...",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Raleway',
