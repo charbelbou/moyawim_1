@@ -6,6 +6,7 @@ import 'drawer.dart';
 import '../loader.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
 
 String dropdownValue = 'Housework';
 
@@ -101,6 +102,7 @@ class Body extends StatelessWidget {
   TextEditingController descriptionAdd = TextEditingController();
   TextEditingController priceAdd = TextEditingController();
   TextEditingController locationAdd = TextEditingController();
+  final _formkey = GlobalKey<FormState>();
   Date p = Date();
   Image u = Image();
   category cat=category();
@@ -151,6 +153,44 @@ class Body extends StatelessWidget {
   }
 
 
+  Future<void> _ackAlert3(BuildContext context) {
+    return showDialog<void>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          elevation: 10.0,
+          backgroundColor: Colors.grey[900],
+          title: Text(
+            'Couldn\'t post ad',
+            style: TextStyle(
+                fontFamily: 'Raleway',
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 16.0),
+          ),
+          content: const Text(
+            'Some fields were left empty',
+            style: TextStyle(
+                fontFamily: 'Raleway', fontSize: 16.0, color: Colors.white),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                child: Text(
+                  'Ok',
+                  style: TextStyle(
+                      fontFamily: 'Raleway',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+          ],
+        );
+      },
+    );
+  }
   Future<void> _ackAlert2(BuildContext context) {
     return showDialog<void>(
       barrierDismissible: false,
@@ -159,8 +199,7 @@ class Body extends StatelessWidget {
         return AlertDialog(
             elevation: 10.0,
             backgroundColor: Colors.grey[900],
-            content: ColorLoader())
-        ;
+            content: ColorLoader());
       },
     );
   }
@@ -189,152 +228,174 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Column(children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Colors.grey[800], Colors.grey[800]])),
-            width: 500.0,
-            child: new TextField(
+          Form(
+            key:_formkey,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Colors.grey[800], Colors.grey[800]])),
+                      width: 500.0,
+                      child: new TextFormField(
+                          controller: titleAdd,
+                          inputFormatters: [
+                            new LengthLimitingTextInputFormatter(30),
+                          ],
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          validator: (val) => val.isEmpty ? 'Enter a title' : null,
 
-                controller: titleAdd,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
+                          decoration: new InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Color(0xFF53CEDB), width: 3.0),
+                                borderRadius: BorderRadius.circular(10.0)
+                              //borderRadius: BorderRadius.all()
+                            ),
+                            labelStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                            prefixIcon: const Icon(Icons.border_color, color: Color(0xFF53CEDB)),
+                            labelText: 'Title',
+                            border: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Color(0xFF53CEDB), width: 3.0),
+                                borderRadius: BorderRadius.circular(10.0)),
+                          ),
+                          style: new TextStyle(
+                              fontSize: 15.0, height: 1.2, color: Colors.white))),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Colors.grey[800], Colors.grey[800]])),
+                      width: 500.0,
+                      child: new TextFormField(
+                          validator: (val) => val.isEmpty ? 'Enter a description' : null,
+                          controller: descriptionAdd,
+                          inputFormatters: [
+                            new LengthLimitingTextInputFormatter(150),
+                          ],
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          decoration: new InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Color(0xFFFc7B4D), width: 3.0),
+                                borderRadius: BorderRadius.circular(10.0)
+                              //borderRadius: BorderRadius.all()
+                            ),
+                            labelStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                            prefixIcon: const Icon(Icons.info, color: Color(0xFFFc7B4D)),
+                            labelText: 'Description',
+                            border: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color:  Color(0xFFFc7B4D), width: 3.0),
+                                borderRadius: BorderRadius.circular(10.0)),
+                          ),
+                          style: new TextStyle(
+                              fontSize: 15.0, height: 1.2, color: Colors.white))),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Colors.grey[800], Colors.grey[800]])),
+                      width: 500.0,
+                      child: new TextFormField(
+                          validator: (val) => val.isEmpty ? 'Enter a price' : null,
+                          controller: priceAdd,
+                          inputFormatters: [
+                            new LengthLimitingTextInputFormatter(4),
+                          ],
+                          keyboardType: TextInputType.number,
+                          maxLines: null,
+                          decoration: new InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Color(0xFFFD7384), width: 3.0),
+                                borderRadius: BorderRadius.circular(10.0)
+                              //borderRadius: BorderRadius.all()
+                            ),
+                            labelStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                            prefixIcon: const Icon(Icons.attach_money, color: Color(0xFFFD7384)),
+                            labelText: 'Price',
+                            border: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Color(0xFFFD7384), width: 3.0),
+                                borderRadius: BorderRadius.circular(10.0)),
+                          ),
+                          style: new TextStyle(
+                              fontSize: 15.0, height: 1.2, color: Colors.white))),
+                ),
 
-                decoration: new InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xFF53CEDB), width: 3.0),
-                      borderRadius: BorderRadius.circular(10.0)
-                      //borderRadius: BorderRadius.all()
-                      ),
-                  labelStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                  prefixIcon: const Icon(Icons.border_color, color: Color(0xFF53CEDB)),
-                  labelText: 'Title',
-                  border: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xFF53CEDB), width: 3.0),
-                      borderRadius: BorderRadius.circular(10.0)),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Colors.grey[800], Colors.grey[800]])),
+                      width: 500.0,
+                      child: new TextFormField(
+                          validator: (val) => val.isEmpty ? 'Enter a location' : null,
+                          controller: locationAdd,
+                          inputFormatters: [
+                            new LengthLimitingTextInputFormatter(20),
+                          ],
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          decoration: new InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Color(0xFFF1B069), width: 3.0),
+                                borderRadius: BorderRadius.circular(10.0)
+                            ),
+                            labelStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                            prefixIcon: const Icon(Icons.add_location, color: Color(0xFFF1B069)),
+                            labelText: 'Location',
+                            border: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Color(0xFFF1B069), width: 3.0),
+                                borderRadius: BorderRadius.circular(10.0)),
+                          ),
+                          style: new TextStyle(
+                              fontSize: 15.0, height: 1.2, color: Colors.white))),
                 ),
-                style: new TextStyle(
-                    fontSize: 15.0, height: 1.2, color: Colors.white))),
-      ),
-      SizedBox(height: 20),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Colors.grey[800], Colors.grey[800]])),
-            width: 500.0,
-            child: new TextField(
-                controller: descriptionAdd,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                decoration: new InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xFFFc7B4D), width: 3.0),
-                      borderRadius: BorderRadius.circular(10.0)
-                      //borderRadius: BorderRadius.all()
-                      ),
-                  labelStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                  prefixIcon: const Icon(Icons.info, color: Color(0xFFFc7B4D)),
-                  labelText: 'Description',
-                  border: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color:  Color(0xFFFc7B4D), width: 3.0),
-                      borderRadius: BorderRadius.circular(10.0)),
-                ),
-                style: new TextStyle(
-                    fontSize: 15.0, height: 1.2, color: Colors.white))),
-      ),
-      SizedBox(height: 20),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Colors.grey[800], Colors.grey[800]])),
-            width: 500.0,
-            child: new TextField(
-                controller: priceAdd,
-                keyboardType: TextInputType.number,
-                maxLines: null,
-                decoration: new InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xFFFD7384), width: 3.0),
-                      borderRadius: BorderRadius.circular(10.0)
-                      //borderRadius: BorderRadius.all()
-                      ),
-                  labelStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                  prefixIcon: const Icon(Icons.attach_money, color: Color(0xFFFD7384)),
-                  labelText: 'Price',
-                  border: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xFFFD7384), width: 3.0),
-                      borderRadius: BorderRadius.circular(10.0)),
-                ),
-                style: new TextStyle(
-                    fontSize: 15.0, height: 1.2, color: Colors.white))),
-      ),
+              ],
+            ),
+          ),
 
-      SizedBox(height: 20),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Colors.grey[800], Colors.grey[800]])),
-            width: 500.0,
-            child: new TextField(
-                controller: locationAdd,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                decoration: new InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xFFF1B069), width: 3.0),
-                      borderRadius: BorderRadius.circular(10.0)
-                      //borderRadius: BorderRadius.all()
-                      ),
-                  labelStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                  prefixIcon: const Icon(Icons.add_location, color: Color(0xFFF1B069)),
-                  labelText: 'Location',
-                  border: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Color(0xFFF1B069), width: 3.0),
-                      borderRadius: BorderRadius.circular(10.0)),
-                ),
-                style: new TextStyle(
-                    fontSize: 15.0, height: 1.2, color: Colors.white))),
-      ),
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: cat,
@@ -373,34 +434,40 @@ class Body extends StatelessWidget {
                       colors: [Color(0xFF2BD093), Color(0xFF2BD093)])),
             ),
             onPressed: () async {
-              List<String> pp=await titleParser(dropdownValue+" "+titleAdd.text);
-              _ackAlert2(context);
-              final docRef= await db.collection('ads').add({
-                'title': titleAdd.text,
-                'description': descriptionAdd.text,
-                'price': priceAdd.text,
-                'location': locationAdd.text,
-                'poster': uid,
-                'worker': "",
-                'date':p.createState().getDate(),
-                'phase': 1,
-              });
-              await db.collection('users').document(uid).updateData({
-                'ads': FieldValue.arrayUnion([docRef.documentID])
-              });
+             if (_formkey.currentState.validate()){
+               _ackAlert2(context);
+               List<String> pp=await titleParser(dropdownValue+" "+titleAdd.text);
+               final docRef= await db.collection('ads').add({
+                 'title': titleAdd.text,
+                 'description': descriptionAdd.text,
+                 'price': priceAdd.text,
+                 'location': locationAdd.text,
+                 'poster': uid,
+                 'worker': "",
+                 'date':p.createState().getDate(),
+                 'phase': 1,
+               });
+               await db.collection('users').document(uid).updateData({
+                 'ads': FieldValue.arrayUnion([docRef.documentID])
+               });
 
 
-              await db.collection('ads').document(docRef.documentID).updateData({
-                'urls': FieldValue.arrayUnion([]),
-                'favoritedby': FieldValue.arrayUnion([]),
-                'applied': FieldValue.arrayUnion([]),
-                'tags':pp.isEmpty ? FieldValue.arrayUnion([]): FieldValue.arrayUnion(pp),
-              });
-              u.createState().UploadFile(docRef.documentID);
-              u.createState().clear();
+               await db.collection('ads').document(docRef.documentID).updateData({
+                 'urls': FieldValue.arrayUnion([]),
+                 'favoritedby': FieldValue.arrayUnion([]),
+                 'applied': FieldValue.arrayUnion([]),
+                 'tags':pp.isEmpty ? FieldValue.arrayUnion([]): FieldValue.arrayUnion(pp),
+               });
+               u.createState().UploadFile(docRef.documentID);
+               u.createState().clear();
 
 
-              _ackAlert(context);
+               _ackAlert(context);
+             }
+             else{
+               _ackAlert3(context);
+             }
+
             }),
       ),
       SizedBox(height: 20),

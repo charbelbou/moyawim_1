@@ -11,6 +11,7 @@ import 'favorites.dart';
 import 'myAppAds.dart';
 import 'jobs.dart';
 import 'myAds2.dart';
+import 'package:moyawim/pages/Wrapper.dart';
 import 'Settings.dart';
 
 class fName extends StatelessWidget {
@@ -380,6 +381,12 @@ class drawer extends StatelessWidget {
                         child: ListTile(
                           onTap: () async {
                             await _auth.signOut();
+                            if(temp!="Home"){
+                              while(Navigator.canPop(context)){
+                                Navigator.pop(context);
+                              }
+                            }
+
                           },
                           leading: Icon(
                             Icons.exit_to_app,

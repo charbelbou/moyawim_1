@@ -19,12 +19,13 @@ class _RegisterState extends State<Register> {
   Widget _title() {
     return RichText(
       text: TextSpan(
-          text: 'register',
-          style: GoogleFonts.zillaSlab(
+          text: 'Register',
+          style: GoogleFonts.raleway(
             textStyle: Theme.of(context).textTheme.display1,
             fontSize: 30,
             fontWeight: FontWeight.w600,
             color: Colors.white70,
+
             ),
           ),
     );
@@ -49,7 +50,8 @@ class _RegisterState extends State<Register> {
           Text(
             'or',
             style: TextStyle(
-                color: Colors.white
+                color: Colors.white,
+                fontFamily: 'Raleway'
             ),
           ),
           Expanded(
@@ -77,7 +79,7 @@ class _RegisterState extends State<Register> {
         children: <Widget>[
           Text(
             'Have an account?',
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Colors.white),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Colors.white, fontFamily: 'Raleway'),
           ),
           SizedBox(
             width: 5,
@@ -91,7 +93,8 @@ class _RegisterState extends State<Register> {
               style: TextStyle(
                   color: Colors.cyan,
                   fontSize: 13,
-                  fontWeight: FontWeight.w600),
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Raleway'),
             ),
           )
         ],
@@ -108,9 +111,12 @@ class _RegisterState extends State<Register> {
   String error="";
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return loading ? ColorLoader(): Scaffold(
       body: SingleChildScrollView(
         child: Container(
+          height: height,
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.topCenter,
@@ -124,7 +130,7 @@ class _RegisterState extends State<Register> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(height: 50.0),
+                      SizedBox(height: 10.0),
                       _title(),
                       Form(
                           key:_formkey,
@@ -134,6 +140,7 @@ class _RegisterState extends State<Register> {
                                 TextFormField(
                                     style: TextStyle(
                                       color: Colors.white,
+                                        fontFamily: 'Raleway'
                                     ),
 
                                   decoration: InputDecoration(
@@ -155,6 +162,7 @@ class _RegisterState extends State<Register> {
                                 TextFormField(
                                     style: TextStyle(
                                       color: Colors.white,
+                                        fontFamily: 'Raleway'
                                     ),
                                     decoration: InputDecoration(
                                       labelStyle: TextStyle(
@@ -177,6 +185,7 @@ class _RegisterState extends State<Register> {
                                     inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[ ]'))],
                                     style: TextStyle(
                                       color: Colors.white,
+                                        fontFamily: 'Raleway'
                                     ),
                                     decoration: InputDecoration(
                                       labelStyle: TextStyle(
@@ -200,6 +209,7 @@ class _RegisterState extends State<Register> {
                                 TextFormField(
                                     style: TextStyle(
                                       color: Colors.white,
+                                        fontFamily: 'Raleway'
                                     ),
                                     decoration: InputDecoration(
                                       labelStyle: TextStyle(
@@ -227,7 +237,7 @@ class _RegisterState extends State<Register> {
                           ),
                           child: Text(
                             'REGISTER',
-                            style: TextStyle(color:Colors.white,fontSize: 15),
+                            style: TextStyle(color:Colors.white,fontSize: 15, fontFamily: 'Raleway'),
 
                             textAlign: TextAlign.center,
                           ),

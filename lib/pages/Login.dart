@@ -75,7 +75,7 @@ class _LoginState extends State<Login> {
         children: <Widget>[
           Text(
             'Don\'t have an account?',
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Colors.white),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600,color: Colors.white, fontFamily: 'Raleway'),
           ),
           SizedBox(
             width: 5,
@@ -89,7 +89,8 @@ class _LoginState extends State<Login> {
               style: TextStyle(
                   color: Colors.cyan,
                   fontSize: 13,
-                  fontWeight: FontWeight.w600),
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Raleway'),
             ),
           )
         ],
@@ -116,7 +117,8 @@ class _LoginState extends State<Login> {
           Text(
             'or',
             style: TextStyle(
-              color: Colors.white
+              color: Colors.white,
+                fontFamily: 'Raleway'
             ),
           ),
           Expanded(
@@ -169,6 +171,7 @@ class _LoginState extends State<Login> {
                                 inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[ ]'))],
                                 style: TextStyle(
                                   color: Colors.white,
+                                  fontFamily: 'Raleway'
                                 ),
                                 decoration: InputDecoration(
                                   labelStyle: TextStyle(
@@ -188,6 +191,7 @@ class _LoginState extends State<Login> {
                             TextFormField(
                                 style: TextStyle(
                                   color: Colors.white,
+                                    fontFamily: 'Raleway'
                                 ),
                                 decoration: InputDecoration(
                                   labelStyle: TextStyle(
@@ -213,7 +217,7 @@ class _LoginState extends State<Login> {
                                 ),
                                 child: Text(
                                   'LOGIN',
-                                  style: TextStyle(color:Colors.white,fontSize: 15),
+                                  style: TextStyle(color:Colors.white,fontSize: 15, fontFamily: 'Raleway'),
                                   textAlign: TextAlign.center,
                                 ),
 
