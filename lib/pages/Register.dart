@@ -262,7 +262,6 @@ class _RegisterState extends State<Register> {
                       ),
                       _divider(),
                       _createAccountLabel(),
-                      SizedBox(height: 68.0),
                     ],
                   ),
                 ),

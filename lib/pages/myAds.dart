@@ -368,7 +368,7 @@ class _myAdsState extends State<myAds> {
                                                         child: Text(
                                                           "Applicants ",
                                                           style: TextStyle(
-                                                              fontSize: 15.0,
+                                                              fontSize: 12.0,
                                                               fontFamily:
                                                                   'Raleway',
                                                               color:
