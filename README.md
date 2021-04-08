@@ -10,10 +10,10 @@ This app was developed in Flutter/Dart, and utilizies Firebase's Authentication,
 
 This project was selected to be presented at the CMPS project day, and was nominated for the best project for CMPS 253.
 
-<img align="left" width="400" height="1000" src="https://github.com/charbelbou/moyawim_1/blob/master/images/New%20folder/Detailpage.jpg">
-<img align="left" width="400" height="1000" src="https://github.com/charbelbou/moyawim_1/blob/master/images/New%20folder/Sidebar.jpg">
+<img align="left" width="300" height="1000" src="https://github.com/charbelbou/moyawim_1/blob/master/images/New%20folder/Detailpage.jpg">
+<img align="left" width="300" height="1000" src="https://github.com/charbelbou/moyawim_1/blob/master/images/New%20folder/Sidebar.jpg">
 <div></div>
-<img align="left" width="400" height="1000" src="https://github.com/charbelbou/moyawim_1/blob/master/images/New%20folder/Home.jpg">
-<img align="left" width="400" height="1000" src="https://github.com/charbelbou/moyawim_1/blob/master/images/New%20folder/applicants.jpeg">
+<img align="left" width="300" height="1000" src="https://github.com/charbelbou/moyawim_1/blob/master/images/New%20folder/Home.jpg">
+<img align="left" width="300" height="1000" src="https://github.com/charbelbou/moyawim_1/blob/master/images/New%20folder/applicants.jpeg">
 
 
