@@ -12,3 +12,5 @@ This project was selected to be presented at the CMPS project day, and was nomin
 
 Demo : https://youtu.be/9TjjsNDchiE
 
+![Image of Flyer](https://github.com/charbelbou/moyawim_1/blob/master/images/ideally_flyer-1%20(1).png)
+
